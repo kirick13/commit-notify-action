@@ -11,7 +11,7 @@ inputs:
   discord-chat-id:
     description: 'Discord: Chat ID to send message to.'
   signature:
-    description: 'Signature of the author of the message.'
+    description: 'Signature of the author of the message (Discord only).'
 
 runs:
   using: "composite"
@@ -29,10 +29,6 @@ runs:
       shell: bash
       run: echo "value=$(git diff --shortstat HEAD~1 HEAD)" >> $GITHUB_OUTPUT
       id: lines
-
-    - name: test
-      run: ls ; echo ; ls $GITHUB_ACTION_PATH
-      shell: bash
 
     - name: Aggregate data
       shell: bash
