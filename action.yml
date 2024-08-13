@@ -1,0 +1,34 @@
+name: 'kirick13/commit-notify-action'
+description: 'Sends notification about commit to Telegram / Discord.'
+inputs:
+  telegram-bot-token:
+    description: 'Telegram: Bot token.'
+  telegram-chat-id:
+    description: 'Telegram: Chat ID to send message to.'
+  discord-bot-token:
+    description: 'Discord: Bot token.'
+  discord-chat-id:
+    description: 'Discord: Chat ID to send message to.'
+  signature:
+    description: 'Signature of the author of the message.'
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Get changed files
+      run: echo "value=$(git diff --name-status HEAD~1 HEAD | awk '{print $1}')" >> $GITHUB_OUTPUT
+      id: files
+    - name: Get changed lines
+      run: echo "value=$(git diff --shortstat HEAD~1 HEAD)" >> $GITHUB_OUTPUT
+      id: lines
+
+    - name: Aggregate data
+      run: node -e aggregate.js
+      id: data
+      env:
+        FILES: ${{ steps.files.outputs.value }}
+        LINES: ${{ steps.lines.outputs.value }}
