@@ -30,6 +30,12 @@ runs:
       run: echo "value=$(git diff --shortstat HEAD~1 HEAD)" >> $GITHUB_OUTPUT
       id: lines
 
+    - name: Set Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+
     - name: Aggregate data
       shell: bash
       run: bun run aggregate.js
