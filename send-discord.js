@@ -74,10 +74,14 @@ const embed = {
 	timestamp: new Date().toISOString(),
 };
 
+if (typeof process.env.REPO_DESCRIPTION === 'string') {
+	embed.description = process.env.REPO_DESCRIPTION;
+}
+
 if (typeof process.env.SIGNATURE === 'string') {
 	embed.footer = {
 		text: process.env.SIGNATURE,
-	}
+	};
 }
 
 const body = {
