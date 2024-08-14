@@ -10,6 +10,8 @@ inputs:
     description: 'Discord: Bot token.'
   discord-chat-id:
     description: 'Discord: Chat ID to send message to.'
+  repo-description:
+    description: 'Description of the repo (Discord only).'
   signature:
     description: 'Signature of the author of the message (Discord only).'
 
@@ -51,6 +53,7 @@ runs:
       run: bun run $GITHUB_ACTION_PATH/send-discord.js
       env:
         DATA: ${{ steps.data.outputs.value }}
+        REPO_DESCRIPTION: ${{ inputs.repo-description }}
         SIGNATURE: ${{ inputs.signature }}
         DISCORD_CHAT_ID: ${{ inputs.discord-chat-id }}
         DISCORD_BOT_TOKEN: ${{ inputs.discord-bot-token }}
