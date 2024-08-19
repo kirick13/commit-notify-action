@@ -25,7 +25,11 @@ runs:
 
     - name: Get changed files
       shell: bash
-      run: echo "value=$(git diff --name-status HEAD~1 HEAD | awk '{print $1}')" >> $GITHUB_OUTPUT
+      run: |
+        VALUE="$(git diff --name-status HEAD~1 HEAD | awk '{print $1}')"
+        echo "value<<EOF" >> $GITHUB_OUTPUT
+        echo "$VALUE" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
       id: files
     - name: Get changed lines
       shell: bash
