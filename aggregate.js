@@ -1,4 +1,5 @@
-import { $ } from 'bun';
+import { $ }          from 'bun';
+import { appendFile } from 'node:fs/promises';
 
 const files = { A: 0, M: 0, D: 0 };
 for await (const line of $`git diff --name-status HEAD~1 HEAD`.lines()) {
