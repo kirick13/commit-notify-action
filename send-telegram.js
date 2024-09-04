@@ -19,6 +19,10 @@ text_lines.push(
 	`\u00a0*\uFF0D*\u00a0\u00a0*${lines.deleted}* line${lines.deleted === 1 ? '' : 's'} of code deleted`,
 );
 
+if (process.env.SIGNATURE) {
+	text_lines.push(`> ${process.env.SIGNATURE}`);
+}
+
 console.log(text_lines.join('\n'));
 console.log();
 
