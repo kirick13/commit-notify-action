@@ -23,32 +23,17 @@ runs:
       with:
         bun-version: 1.1.21
 
-    - name: Get changed files
-      shell: bash
-      run: |
-        VALUE="$(git diff --name-status HEAD~1 HEAD | awk '{print $1}')"
-        echo "value<<EOF" >> $GITHUB_OUTPUT
-        echo "$VALUE" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
-      id: files
-    - name: Get changed lines
-      shell: bash
-      run: echo "value=$(git diff --shortstat HEAD~1 HEAD)" >> $GITHUB_OUTPUT
-      id: lines
-
     - name: Aggregate data
       shell: bash
       run: bun run $GITHUB_ACTION_PATH/aggregate.js
       id: data
-      env:
-        FILES: ${{ steps.files.outputs.value }}
-        LINES: ${{ steps.lines.outputs.value }}
 
     - name: Notify Telegram
       shell: bash
       run: bun run $GITHUB_ACTION_PATH/send-telegram.js
       env:
         DATA: ${{ steps.data.outputs.value }}
+        SIGNATURE: ${{ inputs.signature }}
         TELEGRAM_CHAT_ID: ${{ inputs.telegram-chat-id }}
         TELEGRAM_BOT_TOKEN: ${{ inputs.telegram-bot-token }}
 
