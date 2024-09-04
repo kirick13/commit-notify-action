@@ -36,7 +36,7 @@ const response = await fetch(
 		body: JSON.stringify({
 			chat_id: process.env.TELEGRAM_CHAT_ID,
 			text: text_lines.join('\n'),
-			parse_mode: 'html',
+			parse_mode: 'HTML',
 		}),
 	},
 );
