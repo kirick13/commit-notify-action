@@ -20,7 +20,8 @@ text_lines.push(
 );
 
 if (process.env.SIGNATURE) {
-	text_lines.push(`<blockquote>${process.env.SIGNATURE}</blockquote>`);
+	text_lines.push('');
+	text_lines.push(`<i>${process.env.SIGNATURE}</i>`);
 }
 
 console.log(text_lines.join('\n'));
