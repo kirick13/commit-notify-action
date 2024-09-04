@@ -20,7 +20,7 @@ text_lines.push(
 );
 
 if (process.env.SIGNATURE) {
-	text_lines.push(`> ${process.env.SIGNATURE}`);
+	text_lines.push(`>${process.env.SIGNATURE}`);
 }
 
 console.log(text_lines.join('\n'));
