@@ -1,5 +1,12 @@
+const {
+	'INPUT_DISCORD-WEBHOOK': webhook,
+	'DATA': input,
+	'INPUT_ICON': icon_url,
+	'INPUT_REPO-DESCRIPTION': repo_description,
+	'INPUT_SIGNATURE': signature,
+} = process.env;
 
-const { repo_name, files, lines } = JSON.parse(process.env.DATA);
+const { repo_name, files, lines } = JSON.parse(input);
 
 function format(value, color, type, symbol) {
 	return (
@@ -20,7 +27,7 @@ const embed = {
 	title: "👨‍💻 New commit has arrived!",
 	author: {
 		name: repo_name,
-		icon_url: "https://s.m1.gg/logo/logo_700_pad.png",
+		icon_url,
 	},
 	fields: [
 		{
@@ -74,13 +81,13 @@ const embed = {
 	timestamp: new Date().toISOString(),
 };
 
-if (typeof process.env.REPO_DESCRIPTION === 'string') {
-	embed.description = process.env.REPO_DESCRIPTION;
+if (typeof repo_description === 'string') {
+	embed.description = repo_description;
 }
 
-if (typeof process.env.SIGNATURE === 'string') {
+if (typeof signature === 'string') {
 	embed.footer = {
-		text: process.env.SIGNATURE,
+		text: signature,
 	};
 }
 
@@ -94,17 +101,17 @@ console.log(JSON.stringify(body, null, 4));
 console.log();
 
 const response = await fetch(
-	`https://discord.com/api/v10/channels/${process.env.DISCORD_CHAT_ID}/messages`,
+	webhook,
 	{
 		method: 'POST',
 		headers: {
-			'Authorization': `Bot ${process.env.DISCORD_BOT_TOKEN}`,
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(body),
 	},
 );
 
+console.log(response.status, response.statusText);
 console.log(
 	[ ...response.headers.entries() ]
 		.map(([ k, v ]) => k + ': ' + v)
