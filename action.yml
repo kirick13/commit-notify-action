@@ -1,19 +1,17 @@
 name: 'kirick13/commit-notify-action'
-description: 'Sends notification about commit to Telegram / Discord.'
+description: 'Sends notification about commit to Discord / Telegram.'
 
 inputs:
-  telegram-bot-token:
-    description: 'Telegram: Bot token.'
-  telegram-chat-id:
-    description: 'Telegram: Chat ID to send message to.'
-  discord-bot-token:
-    description: 'Discord: Bot token.'
-  discord-chat-id:
-    description: 'Discord: Chat ID to send message to.'
   repo-description:
     description: 'Description of the repo (Discord only).'
   signature:
     description: 'Signature of the author of the message (Discord only).'
+  discord-webhook:
+    description: 'Discord: Webhook URL.'
+  telegram-bot-token:
+    description: 'Telegram: Bot token.'
+  telegram-chat-id:
+    description: 'Telegram: Chat ID to send message to.'
 
 runs:
   using: "composite"
@@ -21,28 +19,23 @@ runs:
     - name: Set up Bun
       uses: oven-sh/setup-bun@v2
       with:
-        bun-version: 1.1.21
+        bun-version: 1.2.0
 
     - name: Aggregate data
       shell: bash
       run: bun run $GITHUB_ACTION_PATH/aggregate.js
       id: data
 
-    - name: Notify Telegram
-      shell: bash
-      run: bun run $GITHUB_ACTION_PATH/send-telegram.js
-      env:
-        DATA: ${{ steps.data.outputs.value }}
-        SIGNATURE: ${{ inputs.signature }}
-        TELEGRAM_CHAT_ID: ${{ inputs.telegram-chat-id }}
-        TELEGRAM_BOT_TOKEN: ${{ inputs.telegram-bot-token }}
-
     - name: Notify Discord
+      if: ${{ steps.data.outputs.value != '' && inputs.discord-webhook != '' }}
       shell: bash
       run: bun run $GITHUB_ACTION_PATH/send-discord.js
       env:
         DATA: ${{ steps.data.outputs.value }}
-        REPO_DESCRIPTION: ${{ inputs.repo-description }}
-        SIGNATURE: ${{ inputs.signature }}
-        DISCORD_CHAT_ID: ${{ inputs.discord-chat-id }}
-        DISCORD_BOT_TOKEN: ${{ inputs.discord-bot-token }}
+
+    - name: Notify Telegram
+      if: ${{ steps.data.outputs.value != '' && inputs.telegram-bot-token != '' && inputs.telegram-chat-id != '' }}
+      shell: bash
+      run: bun run $GITHUB_ACTION_PATH/send-telegram.js
+      env:
+        DATA: ${{ steps.data.outputs.value }}

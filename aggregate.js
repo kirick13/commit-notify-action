@@ -1,6 +1,10 @@
 import { $ }          from 'bun';
 import { appendFile } from 'node:fs/promises';
 
+const repo_name = process.env.GITHUB_REPOSITORY.match(/^https?:/) && process.env.GITHUB_REPOSITORY.endsWith('.git')
+	? new URL(process.env.GITHUB_REPOSITORY).pathname.replace(/^\//, '').replace(/\.git$/, '')
+	: process.env.GITHUB_REPOSITORY;
+
 const files = { A: 0, M: 0, D: 0 };
 for await (const line of $`git diff --name-status HEAD~1 HEAD`.lines()) {
 	const [ status ] = line.split(/\s+/);
@@ -17,7 +21,7 @@ const [ , lines_deleted = 0 ] = LINES.match(/(?:^|\s)(\d+)\s+deletions/) ?? [];
 await appendFile(
 	process.env.GITHUB_OUTPUT,
 	'value=' + JSON.stringify({
-		repo_name: process.env.GITHUB_REPOSITORY,
+		repo_name,
 		files,
 		lines: {
 			added: Number.parseInt(lines_added),
