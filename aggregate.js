@@ -1,9 +1,9 @@
 import { $ }          from 'bun';
 import { appendFile } from 'node:fs/promises';
 
-console.log(process.env);
-const repo_url = new URL(process.env.GITHUB_REPOSITORY);
-const repo_name = repo_url.pathname.replace(/^\//, '').replace(/\.git$/, '');
+const repo_name = process.env.GITHUB_REPOSITORY.endsWith('.git')
+	? new URL(process.env.GITHUB_REPOSITORY).pathname.replace(/^\//, '').replace(/\.git$/, '');
+	: process.env.GITHUB_REPOSITORY;
 
 const files = { A: 0, M: 0, D: 0 };
 for await (const line of $`git diff --name-status HEAD~1 HEAD`.lines()) {
