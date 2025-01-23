@@ -1,5 +1,5 @@
 name: 'kirick13/commit-notify-action'
-description: 'Sends notification about commit to Telegram / Discord.'
+description: 'Sends notification about commit to Discord / Telegram.'
 
 inputs:
   repo-description:
@@ -27,12 +27,14 @@ runs:
       id: data
 
     - name: Notify Discord
+      if: ${{ steps.data.outputs.value != '' && inputs.discord-webhook != '' }}
       shell: bash
       run: bun run $GITHUB_ACTION_PATH/send-discord.js
       env:
         DATA: ${{ steps.data.outputs.value }}
 
     - name: Notify Telegram
+      if: ${{ steps.data.outputs.value != '' && inputs.telegram-bot-token != '' && inputs.telegram-chat-id != '' }}
       shell: bash
       run: bun run $GITHUB_ACTION_PATH/send-telegram.js
       env:
