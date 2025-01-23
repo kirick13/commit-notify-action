@@ -1,8 +1,8 @@
 import { $ }          from 'bun';
 import { appendFile } from 'node:fs/promises';
 
-const repo_name = process.env.GITHUB_REPOSITORY.endsWith('.git')
-	? new URL(process.env.GITHUB_REPOSITORY).pathname.replace(/^\//, '').replace(/\.git$/, '');
+const repo_name = process.env.GITHUB_REPOSITORY.match(/^https?:/) && process.env.GITHUB_REPOSITORY.endsWith('.git')
+	? new URL(process.env.GITHUB_REPOSITORY).pathname.replace(/^\//, '').replace(/\.git$/, '')
 	: process.env.GITHUB_REPOSITORY;
 
 const files = { A: 0, M: 0, D: 0 };
