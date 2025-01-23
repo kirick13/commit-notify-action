@@ -1,6 +1,7 @@
 import { $ }          from 'bun';
 import { appendFile } from 'node:fs/promises';
 
+console.log(process.env);
 const repo_url = new URL(process.env.GITHUB_REPOSITORY);
 const repo_name = repo_url.pathname.replace(/^\//, '').replace(/\.git$/, '');
 
