@@ -2,6 +2,8 @@ name: 'kirick13/commit-notify-action'
 description: 'Sends notification about commit to Discord / Telegram.'
 
 inputs:
+  icon:
+    description: 'URL to icon to show in the message (Discord only).'
   repo-description:
     description: 'Description of the repo (Discord only).'
   signature:
