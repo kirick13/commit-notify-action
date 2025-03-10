@@ -26,13 +26,13 @@ text_lines.push(
 	`\u00a0<b>\uFF0D</b>\u00a0\u00a0<b>${lines.deleted}</b> line${lines.deleted === 1 ? '' : 's'} of code deleted`,
 );
 
-if (typeof signature === 'string' && signature.length > 0) {
-	text_lines.push('');
-	text_lines.push(`<i>${signature}</i>`);
-}
+// if (typeof signature === 'string' && signature.length > 0) {
+// 	text_lines.push('');
+// 	text_lines.push(`<i>${signature}</i>`);
+// }
 
-console.log(text_lines.join('\n'));
-console.log();
+// console.log(text_lines.join('\n'));
+// console.log();
 
 const response = await fetch(
 	`https://api.telegram.org/bot${bot_token}/sendMessage`,
@@ -49,13 +49,13 @@ const response = await fetch(
 	},
 );
 
-console.log(response.status, response.statusText);
-console.log(
-	[ ...response.headers.entries() ]
-		.map(([ k, v ]) => k + ': ' + v)
-		.join('\n'),
-);
-console.log();
-console.log(
-	await response.text(),
-);
+// console.log(response.status, response.statusText);
+// console.log(
+// 	[ ...response.headers.entries() ]
+// 		.map(([ k, v ]) => k + ': ' + v)
+// 		.join('\n'),
+// );
+// console.log();
+// console.log(
+// 	await response.text(),
+// );
